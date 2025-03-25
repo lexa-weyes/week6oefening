@@ -1,12 +1,18 @@
 import sys
 import websiteping
 
-naam_servers=[]
-Servers=[]
+naam_servers=websiteping.servers_naam_from_log()
+Servers=websiteping.servers_from_log()
 
-try:
-    websiteping.ping(sys.argv[1])
-except:
+if len(sys.argv) > 1:
+    antwoord=websiteping.ping(sys.argv[1])
+    if antwoord is None or "100% loss" in str(antwoord):
+        print("\033[31mServer is niet online\033[0m")
+    elif "0% loss" in str(antwoord):
+        print("\033[32mServer online\033[0m")
+    else:
+        print("\033[38;5;208mSlechte verbinding\033[0m")
+else:
     print("Selecteer een optie:")
     antwoord = input("1) Server toevoegen\n2) Server Verwijderen\n3) lijst tonen\n4) Pingen \n5) Stoppen\n>")
     while antwoord!=5:
@@ -45,6 +51,16 @@ except:
                     print("+---------------+-----------------------+")
                 case 4:
                     print("Pingen gekozen")
+                    print("")
+                    for getal in range(len(Servers)):
+                        sys.stdout.write(naam_servers[getal])
+                        reactie = websiteping.ping(Servers[getal])
+                        if reactie is None or "100% loss" in str(reactie):
+                            sys.stdout.write("\033[31m Server is niet online\033[0m\n")
+                        elif "0% loss" in str(reactie):
+                            sys.stdout.write("\033[32m Server online\033[0m\n")
+                        else:
+                            sys.stdout.write("\033[38;5;208m Slechte verbinding\033[0m\n")
                 case 5:
                     print("Programma sluit.")
                 case _:
@@ -52,5 +68,8 @@ except:
         if antwoord!=5:
             print("Selecteer een optie.")
             antwoord = input("1) Server toevoegen\n2) Server Verwijderen\n3) lijst tonen\n4) Pingen \n5) Stoppen\n>")
+        
+        websiteping.servers_to_log(Servers)
+        websiteping.servers_naam_to_log(naam_servers)
 
 
