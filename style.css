@@ -1,0 +1,13 @@
+body{
+    padding:10vh;
+}
+h1{
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+p{
+    padding:10vh;
+    line-height: 2rem;
+    font-size: 1.3rem;
+    border:1px solid black;
+}

@@ -1,5 +1,6 @@
 import sys
 import websiteping
+import websiteGenerator
 
 naam_servers=websiteping.servers_naam_from_log()
 Servers=websiteping.servers_from_log()
@@ -52,6 +53,7 @@ else:
                 case 4:
                     print("Pingen gekozen")
                     print("")
+                    websiteping.datum_log()
                     for getal in range(len(Servers)):
                         sys.stdout.write(naam_servers[getal])
                         reactie = websiteping.ping(Servers[getal])
@@ -61,6 +63,18 @@ else:
                             sys.stdout.write("\033[32m Server online\033[0m\n")
                         else:
                             sys.stdout.write("\033[38;5;208m Slechte verbinding\033[0m\n")
+                        if "Received = 4"in reactie:
+                            websiteping.geschiedenis_log(naam_servers[getal],4)
+                        elif "Received = 3"in reactie:
+                            websiteping.geschiedenis_log(naam_servers[getal],3)
+                        elif "Received = 2"in reactie:
+                            websiteping.geschiedenis_log(naam_servers[getal],2)
+                        elif "Received = 1"in reactie:
+                            websiteping.geschiedenis_log(naam_servers[getal],1)
+                        elif "Received = 0"in reactie:
+                            websiteping.geschiedenis_log(naam_servers[getal],0)
+                    websiteGenerator.genereer()
+
                 case 5:
                     print("Programma sluit.")
                 case _:
